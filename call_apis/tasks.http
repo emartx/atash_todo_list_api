@@ -1,0 +1,59 @@
+http://localhost:3002/api/tasks
+
+###
+
+http://localhost:3002/api/tasks?isDone=true
+
+###
+
+http://localhost:3002/api/tasks?isDone=false
+
+###
+
+http://localhost:3002/api/task/30faf975-b7f0-45db-a113-64547c46c07f
+
+###
+
+http://localhost:3002/api/task/30faf975-b7f0-45db-a113-64547c46c07f/toggleDone
+
+###
+
+http://localhost:3002/api/task/fake_id
+
+###
+
+http://localhost:3002/api/task/
+
+###
+
+# POST http://localhost:3002/api/task HTTP/1.1
+POST http://34.41.198.14:3002/api/task HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Task 888",
+    "authorId": "5",
+    "categoryId": "1"
+}
+
+###
+
+POST http://localhost:3002/api/task HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Task 7",
+    "authorId": "13214214",
+    "categoryId": "3"
+}
+
+###
+
+POST http://localhost:3002/api/task HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Task 7",
+    "authorId": "1",
+    "categoryId": "21323233"
+}

@@ -7,7 +7,7 @@ export class TaskItem {
   constructor(title: string, category: CategoryItem, author: Author) {
     this.title = title || "";
     this.isDone = false;
-    this.creationDate = Date.now() / 1000;
+    this.creationDate = Math.round(Date.now() / 1000);
     this.categoryItem = category;
     this.author = author;
   }

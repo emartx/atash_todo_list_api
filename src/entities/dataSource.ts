@@ -8,6 +8,9 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
+const useSSL =
+  process.env.DB_SSL === "true" || process.env.NODE_ENV === "production";
+
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: process.env.DB_HOST,
@@ -18,6 +21,11 @@ export const AppDataSource = new DataSource({
   entities: [TaskItem, CategoryItem, Author],
   synchronize: true,
   logging: false,
+  ssl: useSSL
+    ? {
+        rejectUnauthorized: false,
+      }
+    : false,
 });
 
 AppDataSource.initialize()

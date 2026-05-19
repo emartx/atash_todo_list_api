@@ -14,7 +14,7 @@ const corsOptions = {
       !origin ||
       origin === "http://localhost:3000" ||
       origin.match(/^https:\/\/[a-z0-9-]+\.netlify\.app$/) ||
-      origin.match(/^https:\/\/[a-z0-9-]+\.github\.dev$/)
+      origin.match(/^https:\/\/[a-z0-9-]+\.app\.github\.dev$/)
     ) {
       callback(null, true);
     } else {

@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import { TaskItem } from "./TaskItem";
 import { CategoryItem } from "./Category";
 import { Author } from "./Author";
+import { User } from "./User";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -18,7 +19,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [TaskItem, CategoryItem, Author],
+  entities: [TaskItem, CategoryItem, Author, User],
   synchronize: true,
   logging: false,
   ssl: useSSL

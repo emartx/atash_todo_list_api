@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import taskRoutes from "./routes/taskItem";
 import categoryRoutes from "./routes/category";
 import authorRoutes from "./routes/author";
+import authRoutes from "./routes/auth";
 import cors from "cors";
 
 const app = express();
@@ -32,6 +33,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/", taskRoutes);
 app.use("/api/", categoryRoutes);
 app.use("/api/", authorRoutes);
+app.use("/api/", authRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

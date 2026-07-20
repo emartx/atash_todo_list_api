@@ -1,0 +1,20 @@
+src/index.ts
+  s_278e351cacdc6d::t_f4ef0ca70eeb27 7-9,14-16
+  s_278e351cacdc6d::t_2332c4ef859e44 17-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "b5d6089154a158ad0655ff498495195bd9f227c2",
+  "prompts": {},
+  "sessions": {
+    "s_278e351cacdc6d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f80c2-98f0-7e01-8b2e-9f0a3f60323f",
+        "model": "gpt-5.4"
+      },
+      "human_author": "EmArTx <emad.armoun@gmail.com>"
+    }
+  }
+}

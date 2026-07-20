@@ -4,19 +4,21 @@ import categoryRoutes from "./routes/category";
 import authorRoutes from "./routes/author";
 import authRoutes from "./routes/auth";
 import cors from "cors";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = 3002;
 
+const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const corsOptions = {
   origin: (origin: string | undefined, callback: any) => {
-    // Check if the origin is localhost or matches the netlify domain pattern
-    if (
-      !origin ||
-      origin === "http://localhost:3000" ||
-      origin.match(/^https:\/\/[a-z0-9-]+\.netlify\.app$/) ||
-      origin.match(/^https:\/\/[a-z0-9-]+\.app\.github\.dev$/)
-    ) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));

@@ -1,0 +1,24 @@
+src/util/auth.ts
+  s_5de98b40a5c715::t_e5a9b8eb1a4ab2 6
+  s_5de98b40a5c715::t_590f1d6c9b15a6 3-5,7-44
+src/routes/auth.ts
+  s_5de98b40a5c715::t_590f1d6c9b15a6 4,77,82-92
+.env.sample
+  s_5de98b40a5c715::t_590f1d6c9b15a6 7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "5c4e10ae07bf615f12d7556e5e854edd74597452",
+  "prompts": {},
+  "sessions": {
+    "s_5de98b40a5c715": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f930b-ea61-7e80-83ea-de6fdb389082",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "EmArTx <emad.armoun@gmail.com>"
+    }
+  }
+}

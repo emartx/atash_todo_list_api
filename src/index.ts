@@ -3,6 +3,7 @@ import taskRoutes from "./routes/taskItem";
 import categoryRoutes from "./routes/category";
 import authorRoutes from "./routes/author";
 import authRoutes from "./routes/auth";
+import { requireAccessToken } from "./middlewares/auth";
 import cors from "cors";
 import * as dotenv from "dotenv";
 
@@ -32,6 +33,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello from TodoList Apis!");
 });
 
+app.use("/api", requireAccessToken);
 app.use("/api/", taskRoutes);
 app.use("/api/", categoryRoutes);
 app.use("/api/", authorRoutes);

@@ -9,6 +9,20 @@ const base64UrlEncode = (value: string | Buffer) =>
     .replace(/\+/g, "-")
     .replace(/\//g, "_");
 
+const base64UrlDecode = (value: string) => {
+  const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
+  const padding = "=".repeat((4 - (base64.length % 4)) % 4);
+
+  return Buffer.from(`${base64}${padding}`, "base64").toString("utf8");
+};
+
+type AccessTokenPayload = {
+  sub: string;
+  userName: string;
+  iat: number;
+  exp: number;
+};
+
 const getAccessTokenExpirySeconds = () => {
   const configuredExpiry = Number(process.env.JWT_ACCESS_TOKEN_EXPIRES_IN_SECONDS);
 
@@ -40,6 +54,61 @@ export const createAccessToken = (user: { id: number; userName: string }) => {
   );
 
   return { token: `${unsignedToken}.${signature}`, expiresInSeconds };
+};
+
+export const verifyAccessToken = (token: string): AccessTokenPayload | null => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error("JWT_SECRET environment variable is required");
+  }
+
+  const [encodedHeader, encodedPayload, signature, ...extraParts] = token.split(".");
+  if (!encodedHeader || !encodedPayload || !signature || extraParts.length > 0) {
+    return null;
+  }
+
+  const unsignedToken = `${encodedHeader}.${encodedPayload}`;
+  const expectedSignature = base64UrlEncode(
+    crypto.createHmac("sha256", secret).update(unsignedToken).digest()
+  );
+  const signatureBuffer = Buffer.from(signature);
+  const expectedSignatureBuffer = Buffer.from(expectedSignature);
+
+  if (
+    signatureBuffer.length !== expectedSignatureBuffer.length ||
+    !crypto.timingSafeEqual(signatureBuffer, expectedSignatureBuffer)
+  ) {
+    return null;
+  }
+
+  try {
+    const header = JSON.parse(base64UrlDecode(encodedHeader));
+    const payload: unknown = JSON.parse(base64UrlDecode(encodedPayload));
+
+    if (
+      header.alg !== "HS256" ||
+      header.typ !== "JWT" ||
+      typeof payload !== "object" ||
+      payload === null
+    ) {
+      return null;
+    }
+
+    const { sub, userName, iat, exp } = payload as AccessTokenPayload;
+    if (
+      typeof sub !== "string" ||
+      typeof userName !== "string" ||
+      !Number.isInteger(iat) ||
+      !Number.isInteger(exp) ||
+      exp <= Math.floor(Date.now() / 1000)
+    ) {
+      return null;
+    }
+
+    return { sub, userName, iat, exp };
+  } catch {
+    return null;
+  }
 };
 
 export const hashPassword = (password: string) => {

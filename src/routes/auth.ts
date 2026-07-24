@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { User } from "../entities/User";
 import { AppDataSource } from "../entities/dataSource";
-import { hashPassword, verifyPassword } from "../util/auth";
+import { createAccessToken, hashPassword, verifyPassword } from "../util/auth";
 import { returnFailure, returnSuccess } from "../util/util";
 
 const router: Router = express.Router();
@@ -74,16 +74,22 @@ router.post("/login", async (req: Request, res: Response) => {
 
     user.lastLoginDate = Date.now();
     await userRepository.save(user);
+    const { token, expiresInSeconds } = createAccessToken(user);
 
     return returnSuccess(
       res,
       {
-        id: user.id,
-        userName: user.userName,
-        fullName: user.fullName,
-        registerDate: user.registerDate,
-        lastLoginDate: user.lastLoginDate,
-        isActive: user.isActive,
+        token,
+        tokenType: "Bearer",
+        expiresInSeconds,
+        user: {
+          id: user.id,
+          userName: user.userName,
+          fullName: user.fullName,
+          registerDate: user.registerDate,
+          lastLoginDate: user.lastLoginDate,
+          isActive: user.isActive,
+        },
       },
       "Login successful"
     );

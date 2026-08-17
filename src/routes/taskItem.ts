@@ -10,6 +10,8 @@ import { TaskItem } from "../entities/TaskItem";
 import { AppDataSource } from "../entities/dataSource";
 
 const router: Router = express.Router();
+const sortableTaskFields = ["title", "isDone", "creationDate"] as const;
+type SortableTaskField = (typeof sortableTaskFields)[number];
 
 router.get("/tasks", async (req: Request, res: Response) => {
   const taskItemRepository = AppDataSource.getRepository(TaskItem);
@@ -17,6 +19,8 @@ router.get("/tasks", async (req: Request, res: Response) => {
   const isDone = req.query.isDone;
   const pageQuery = req.query.page;
   const limitQuery = req.query.limit;
+  const sortByQuery = req.query.sortBy;
+  const sortOrderQuery = req.query.sortOrder;
   const paginationRequested = pageQuery !== undefined || limitQuery !== undefined;
 
   const page =
@@ -26,6 +30,33 @@ router.get("/tasks", async (req: Request, res: Response) => {
   if (page === undefined || limit === undefined) {
     return returnFailure(res, 400, "Page and limit must be positive integers");
   }
+
+  if (
+    sortByQuery !== undefined &&
+    (typeof sortByQuery !== "string" ||
+      !sortableTaskFields.includes(sortByQuery as SortableTaskField))
+  ) {
+    return returnFailure(
+      res,
+      400,
+      `Sort field must be one of: ${sortableTaskFields.join(", ")}`
+    );
+  }
+
+  if (
+    sortOrderQuery !== undefined &&
+    (typeof sortOrderQuery !== "string" ||
+      !["asc", "desc"].includes(sortOrderQuery.toLowerCase()))
+  ) {
+    return returnFailure(res, 400, "Sort order must be either asc or desc");
+  }
+
+  const sortBy = (sortByQuery ?? "creationDate") as SortableTaskField;
+  const sortOrder = (typeof sortOrderQuery === "string"
+    ? sortOrderQuery.toUpperCase()
+    : "DESC") as "ASC" | "DESC";
+  const sortingRequested =
+    paginationRequested || sortByQuery !== undefined || sortOrderQuery !== undefined;
 
   const tasks = await taskItemRepository.find({
     ...(isDone === undefined ? {} : { where: { isDone: isDone === "true" } }),
@@ -37,6 +68,14 @@ router.get("/tasks", async (req: Request, res: Response) => {
       ? {
           skip: (page - 1) * limit,
           take: limit,
+        }
+      : {}),
+    ...(sortingRequested
+      ? {
+          order: {
+            [sortBy]: sortOrder,
+            id: "ASC" as const,
+          },
         }
       : {}),
   });

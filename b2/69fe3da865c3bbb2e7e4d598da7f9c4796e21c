@@ -1,0 +1,27 @@
+call_apis/tasks.http
+  s_2067805a82e3c7::t_af67fdde2d596b 13-20
+src/routes/taskItem.ts
+  s_2067805a82e3c7::t_af67fdde2d596b 18-21,36-39,41
+  s_2067805a82e3c7::t_0677cb0c0e6529 2-6
+  s_2067805a82e3c7::t_1000e4563eec3a 22-25
+  s_2067805a82e3c7::t_af06d852b47db5 34-35
+src/util/util.ts
+  s_2067805a82e3c7::t_0677cb0c0e6529 3-11
+  s_2067805a82e3c7::t_49cc97e81dabaf 12-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "b269fe3da865c3bbb2e7e4d598da7f9c4796e21c",
+  "prompts": {},
+  "sessions": {
+    "s_2067805a82e3c7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a00e20-d3ed-7513-91ab-881e3669f96b",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "EmArTx <emad.armoun@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+src/util/util.ts
+  s_2067805a82e3c7::t_1000e4563eec3a 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "feff7a92fb64543df0db6ce6e540a1ff3d22db49",
+  "prompts": {},
+  "sessions": {
+    "s_2067805a82e3c7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a00e20-d3ed-7513-91ab-881e3669f96b",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "EmArTx <emad.armoun@gmail.com>"
+    }
+  }
+}

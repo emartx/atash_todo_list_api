@@ -1,5 +1,23 @@
 import express, { Request, Response } from "express";
 
+export const parsePositiveInteger = (
+  value: unknown,
+  defaultValue: number
+): number | undefined => {
+  if (value === undefined) {
+    return defaultValue;
+  }
+
+  if (typeof value !== "string" || !/^\d+$/.test(value)) {
+    return undefined;
+  }
+
+  const parsedValue = Number(value);
+  return Number.isSafeInteger(parsedValue) && parsedValue > 0
+    ? parsedValue
+    : undefined;
+};
+
 export const returnSuccess = (
   res: Response,
   data: unknown,

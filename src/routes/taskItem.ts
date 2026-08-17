@@ -1,5 +1,9 @@
 import express, { Request, Response, Router } from "express";
-import { returnFailure, returnSuccess } from "../util/util";
+import {
+  parsePositiveInteger,
+  returnFailure,
+  returnSuccess,
+} from "../util/util";
 import { CategoryItem } from "../entities/Category";
 import { Author } from "../entities/Author";
 import { TaskItem } from "../entities/TaskItem";
@@ -11,24 +15,30 @@ router.get("/tasks", async (req: Request, res: Response) => {
   const taskItemRepository = AppDataSource.getRepository(TaskItem);
 
   const isDone = req.query.isDone;
-  if (isDone === undefined) {
-    const tasks = await taskItemRepository.find({
-      relations: {
-        categoryItem: true,
-        author: true,
-      },
-    });
-    return returnSuccess(res, tasks);
+  const pageQuery = req.query.page;
+  const limitQuery = req.query.limit;
+  const paginationRequested = pageQuery !== undefined || limitQuery !== undefined;
+
+  const page = parsePositiveInteger(pageQuery, 1);
+  const limit = parsePositiveInteger(limitQuery, 10);
+  if (page === undefined || limit === undefined) {
+    return returnFailure(res, 400, "Page and limit must be positive integers");
   }
 
-  const filteredTasks = await taskItemRepository.find({
-    where: { isDone: isDone === "true" },
+  const tasks = await taskItemRepository.find({
+    ...(isDone === undefined ? {} : { where: { isDone: isDone === "true" } }),
     relations: {
       categoryItem: true,
       author: true,
     },
+    ...(paginationRequested
+      ? {
+          skip: (page - 1) * limit,
+          take: limit,
+        }
+      : {}),
   });
-  return returnSuccess(res, filteredTasks);
+  return returnSuccess(res, tasks);
 });
 
 router.get("/task/:id", async (req: Request, res: Response) => {

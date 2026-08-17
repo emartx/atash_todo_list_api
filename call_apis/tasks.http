@@ -10,6 +10,14 @@ http://localhost:3002/api/tasks?isDone=false
 
 ###
 
+http://localhost:3002/api/tasks?page=1&limit=10
+
+###
+
+http://localhost:3002/api/tasks?isDone=false&page=2&limit=5
+
+###
+
 http://localhost:3002/api/task/30faf975-b7f0-45db-a113-64547c46c07f
 
 ###

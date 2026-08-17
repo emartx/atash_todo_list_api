@@ -1,13 +1,6 @@
-import express, { Request, Response } from "express";
+import { Response } from "express";
 
-export const parsePositiveInteger = (
-  value: unknown,
-  defaultValue: number
-): number | undefined => {
-  if (value === undefined) {
-    return defaultValue;
-  }
-
+export const parsePositiveInteger = (value: unknown): number | undefined => {
   if (typeof value !== "string" || !/^\d+$/.test(value)) {
     return undefined;
   }

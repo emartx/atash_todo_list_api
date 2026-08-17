@@ -19,8 +19,10 @@ router.get("/tasks", async (req: Request, res: Response) => {
   const limitQuery = req.query.limit;
   const paginationRequested = pageQuery !== undefined || limitQuery !== undefined;
 
-  const page = parsePositiveInteger(pageQuery, 1);
-  const limit = parsePositiveInteger(limitQuery, 10);
+  const page =
+    pageQuery === undefined ? 1 : parsePositiveInteger(pageQuery);
+  const limit =
+    limitQuery === undefined ? 10 : parsePositiveInteger(limitQuery);
   if (page === undefined || limit === undefined) {
     return returnFailure(res, 400, "Page and limit must be positive integers");
   }
